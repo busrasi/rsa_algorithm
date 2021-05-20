@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(rsa LANGUAGES CXX)
+project(ActiveAuthDecryptor LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -16,22 +16,28 @@ set(OPENSSL_DIR "/usr/local/opt/openssl")
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 
-add_executable(rsa
+add_executable(${PROJECT_NAME}
   main.cpp
-  rsaalgorithm.h
-  rsaalgorithm.cpp
+
+  rsa_manager.h
+  rsa_manager.cpp
 
   nfc_active_authentication.h
   nfc_active_authentication.cpp
+
+  resources.qrc
 
 )
 target_include_directories(${PROJECT_NAME}
     PUBLIC ${OPENSSL_DIR}/include
     #PUBLIC ${OPENSSL_DIR}/1.1.1i/include
     )
-target_link_libraries(rsa Qt${QT_VERSION_MAJOR}::Core
+target_link_libraries(${PROJECT_NAME}
+    Qt${QT_VERSION_MAJOR}::Core
     ${OPENSSL_DIR}/lib/libssl.a
     ${OPENSSL_DIR}/lib/libcrypto.a
     #${OPENSSL_DIR}/1.1.1i/lib/libssl.a
     #${OPENSSL_DIR}/1.1.1i/lib/libcrypto.a
     )
+
+

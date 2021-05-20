@@ -60,3 +60,5 @@ CMakeCache.txt
 Dockerfile
 
 CMakeFiles/
+
+.vscode/

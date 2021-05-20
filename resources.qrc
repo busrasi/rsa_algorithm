@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/rsa.private</file>
+        <file>resources/rsa.public</file>
+    </qresource>
+</RCC>
