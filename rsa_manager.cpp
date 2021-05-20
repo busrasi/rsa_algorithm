@@ -20,7 +20,7 @@ RSAManager::RSAManager()
     const auto rawData = toVector(dataFromString(messageToEncrypt));
     std::vector<uint8_t> decryptedData{};
     m_encryptedTestMessage.resize(rawData.size());
-    decryptedData.resize(rawData.size());
+    m_decryptedMessage.resize(rawData.size());
 
 
     m_e = BN_new();
@@ -31,15 +31,11 @@ RSAManager::RSAManager()
     m_publicRSAKey = RSAPublicKey_dup(m_rsaKeyPair);
 
     auto encResult = RSA_private_encrypt(rawData.size(), rawData.data(), m_encryptedTestMessage.data(), m_privateRSAKey, RSA_PKCS1_PADDING);
-    auto decResult = RSA_public_decrypt(RSA_size(m_publicRSAKey),m_encryptedTestMessage.data() ,decryptedData.data(), m_publicRSAKey, RSA_PKCS1_PADDING);
+    auto decResult = RSA_public_decrypt(RSA_size(m_publicRSAKey),m_encryptedTestMessage.data() ,m_decryptedMessage.data(), m_publicRSAKey, RSA_PKCS1_PADDING);
 
     qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "raw msg: " << humanReadable(dataFromVector(rawData));
     qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "enc msg: " << humanReadable(dataFromVector(m_encryptedTestMessage));
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "dec msg: " << humanReadable(dataFromVector(decryptedData));
-//    qDebug() << m_publicRSAKey;
-
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "m_publicRSAKey: " << m_publicRSAKey;
-
+    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "dec msg: " << humanReadable(dataFromVector(m_decryptedMessage));
 }
 
 RSAManager::~RSAManager()

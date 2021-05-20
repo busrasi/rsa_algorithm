@@ -18,6 +18,7 @@ public:
 
 private:
     //Encrypted Test Message
+    std::vector<uint8_t> m_decryptedMessage{};
     std::vector<uint8_t> m_encryptedTestMessage{};
 
     rsa_st* m_privateRSAKey{nullptr};

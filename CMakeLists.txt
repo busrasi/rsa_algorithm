@@ -22,8 +22,8 @@ add_executable(${PROJECT_NAME}
   rsa_manager.h
   rsa_manager.cpp
 
-  nfc_active_authentication.h
-  nfc_active_authentication.cpp
+  #nfc_active_authentication.h
+  #nfc_active_authentication.cpp
 
   resources.qrc
 
