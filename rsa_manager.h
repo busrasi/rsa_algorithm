@@ -5,6 +5,7 @@
 #include <QByteArray>
 
 class rsa_st;
+class bignum_st;
 
 class RSAManager
 {
@@ -21,6 +22,11 @@ private:
 
     rsa_st* m_privateRSAKey{nullptr};
     rsa_st* m_publicRSAKey{nullptr};
+    rsa_st* m_rsaKeyPair{nullptr};
+    bignum_st* m_e{nullptr};
+
+
+    int m_rc{};
 
     std::vector<uint8_t> toVector(const QByteArray &data);
     QByteArray dataFromString(const QString &data);

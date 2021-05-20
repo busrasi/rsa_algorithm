@@ -10,12 +10,14 @@ NFCActiveAuthentication::NFCActiveAuthentication(rsa_st *publicKey)
 
 std::vector<uint8_t> NFCActiveAuthentication::decryptMessage(std::vector<uint8_t> &data)
 {
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "enc msg: " << humanReadable(dataFromVector(data));
-    qDebug() << m_publicRSAKey;
+    auto encryptedData = data;
+    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "enc msg: " << humanReadable(dataFromVector(encryptedData));
+    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "m_publicRSAKey: " << m_publicRSAKey;
     std::vector<uint8_t> decryptedData{};
-    decryptedData.resize(data.size());
-    auto decResult = RSA_public_decrypt(RSA_size(m_publicRSAKey), data.data() ,decryptedData.data(), m_publicRSAKey, RSA_PKCS1_PADDING);
+    decryptedData.resize(encryptedData.size());
+    auto decResult = RSA_public_decrypt(RSA_size(m_publicRSAKey), encryptedData.data() ,decryptedData.data(), m_publicRSAKey, RSA_PKCS1_PADDING);
     qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "decresult: " << decResult;
+    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "dec msg: " << humanReadable(dataFromVector(decryptedData));
     return std::vector<uint8_t> {};
 }
 
