@@ -12,9 +12,9 @@ public:
     RSAManager();
     ~RSAManager();
 
-    std::vector<uint8_t> publicKey();
-
     std::vector<uint8_t> encryptedTestMessage() const;
+    rsa_st *publicRSAKey() const;
+
 private:
     //Encrypted Test Message
     std::vector<uint8_t> m_encryptedTestMessage{};

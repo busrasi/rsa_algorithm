@@ -21,13 +21,11 @@ using namespace std;
 
 RSAManager::RSAManager()
 {
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__;
     const auto rawData = toVector(dataFromString(messageToEncrypt));
     std::vector<uint8_t> decryptedData{};
     m_encryptedTestMessage.resize(rawData.size());
     decryptedData.resize(rawData.size());
 
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__;
 
     int rc;
     BIGNUM *e = BN_new();
@@ -41,18 +39,14 @@ RSAManager::RSAManager()
     m_publicRSAKey = RSA_new();
     m_publicRSAKey = RSAPublicKey_dup(rsaKeyPair);
 
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__;
-
+    qDebug() << m_publicRSAKey;
     auto encResult = RSA_private_encrypt(rawData.size(), rawData.data(), m_encryptedTestMessage.data(), m_privateRSAKey, RSA_PKCS1_PADDING);
-    auto decResult = RSA_public_decrypt(RSA_size(m_publicRSAKey),m_encryptedTestMessage.data() ,decryptedData.data(), m_publicRSAKey, RSA_PKCS1_PADDING);
+    //auto decResult = RSA_public_decrypt(RSA_size(m_publicRSAKey),m_encryptedTestMessage.data() ,decryptedData.data(), m_publicRSAKey, RSA_PKCS1_PADDING);
 
 
-    qDebug() << "RSA Size: " << RSA_size(m_publicRSAKey);
-    qDebug() << "encResult:" << encResult << "decResult:" << decResult;
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "raw data: " << humanReadable(dataFromVector(rawData));
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "encry data: " << humanReadable(dataFromVector(m_encryptedTestMessage));
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "decry data: " << humanReadable(dataFromVector(decryptedData));
-
+    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "raw msg: " << humanReadable(dataFromVector(rawData));
+    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "enc msg: " << humanReadable(dataFromVector(m_encryptedTestMessage));
+    qDebug() << m_publicRSAKey;
 
 
 
@@ -62,17 +56,6 @@ RSAManager::~RSAManager()
 {
 
 
-}
-
-std::vector<uint8_t> RSAManager::publicKey()
-{
-    std::vector<uint8_t> publicKey{};
-    publicKey.resize(RSA_size(m_publicRSAKey));
-    auto publicKeyPtr = publicKey.data();
-    auto res = i2d_RSA_PUBKEY(m_publicRSAKey, &publicKeyPtr);
-    qDebug() << "pub key res: " << res;
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "publicKey data: " << humanReadable(dataFromVector(publicKey));
-    return publicKey;
 }
 
 std::vector<uint8_t> RSAManager::toVector(const QByteArray &data)
@@ -114,36 +97,7 @@ std::vector<uint8_t> RSAManager::encryptedTestMessage() const
     return m_encryptedTestMessage;
 }
 
-/*
-//Read RSA Key Pair PEM
-auto privateFilePointer = fopen("/Users/muhammet/Training/rsa_algorithm/resources/rsa.private", "rb");
-auto publicFilePointer = fopen("/Users/muhammet/Training/rsa_algorithm/resources/rsa.public", "rb");
-
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "privateFilePointer:" << privateFilePointer;
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "publicFilePointer:" << publicFilePointer;
-
-RSA *privateRSA{nullptr};
-RSA *publicRSA{nullptr};
-
-PEM_read_RSAPrivateKey(privateFilePointer, &privateRSA, nullptr, nullptr);
-PEM_read_RSA_PUBKEY(publicFilePointer, &publicRSA, nullptr, nullptr);
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "privateRSA:" << privateRSA;
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "publicRSA:" << publicRSA;
-
-//Start Encryption with Private RSA Key
-const auto rawData = toVector(dataFromString(messageToEncrypt));
-std::vector<uint8_t> encryptedData{};
-encryptedData.resize(rawData.size());
-//https://www.openssl.org/docs/man1.1.1/man3/RSA_private_encrypt.html
-const auto encryptResult = RSA_private_encrypt(rawData.size(), rawData.data(), encryptedData.data(), privateRSA, RSA_PKCS1_PADDING);
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "encryption result: " << encryptResult;
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "rawData: " << humanReadable(dataFromVector(rawData));
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "encryption result: " << humanReadable(dataFromVector(encryptedData));
-
-//Start Decryption with Public RSA Key
-std::vector<uint8_t> decryptedData{};
-decryptedData.resize(encryptedData.size());
-const auto decrpytResult = RSA_public_decrypt(RSA_size(publicRSA), encryptedData.data(), decryptedData.data(), publicRSA, RSA_PKCS1_PADDING);
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "decrpytResult result: " << decrpytResult;
-qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "decryption data result: " << humanReadable(dataFromVector(decryptedData));
-*/
+rsa_st *RSAManager::publicRSAKey() const
+{
+    return m_publicRSAKey;
+}
